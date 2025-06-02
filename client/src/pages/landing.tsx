@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChefHat, Users, Timer, Utensils } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ChefHat, Users, Timer, Utensils, Star, Play, Sparkles, GitBranch } from "lucide-react";
 
 export default function Landing() {
   return (

@@ -8,6 +8,7 @@ import Landing from "@/pages/landing";
 import Home from "@/pages/home";
 import RecipeDetail from "@/pages/recipe-detail";
 import CreateRecipe from "@/pages/create-recipe";
+import Discover from "@/pages/discover";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -20,6 +21,7 @@ function Router() {
       ) : (
         <>
           <Route path="/" component={Home} />
+          <Route path="/discover" component={Discover} />
           <Route path="/recipes/new" component={CreateRecipe} />
           <Route path="/recipes/:id" component={RecipeDetail} />
         </>
