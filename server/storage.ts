@@ -24,6 +24,7 @@ import { eq, and, or, desc } from "drizzle-orm";
 export interface IStorage {
   // User operations (IMPORTANT: mandatory for Replit Auth)
   getUser(id: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
   
   // Recipe operations
@@ -58,6 +59,11 @@ export class DatabaseStorage implements IStorage {
   // User operations (IMPORTANT: mandatory for Replit Auth)
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
     return user;
   }
 
@@ -123,8 +129,8 @@ export class DatabaseStorage implements IStorage {
 
     return {
       ...recipe,
-      creator,
-      originalCreator,
+      creator: creator!,
+      originalCreator: originalCreator!,
       ingredients: recipeIngredients,
       instructions: recipeInstructions,
       collaborators: recipeCollaborators,
@@ -133,17 +139,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getRecipesByUser(userId: string): Promise<Recipe[]> {
-    return await db
+    const userRecipes = await db
       .select()
       .from(recipes)
-      .where(
-        or(
-          eq(recipes.createdBy, userId),
-          eq(collaborators.userId, userId)
-        )
-      )
-      .leftJoin(collaborators, eq(recipes.id, collaborators.recipeId))
+      .where(eq(recipes.createdBy, userId))
       .orderBy(desc(recipes.updatedAt));
+    
+    return userRecipes;
   }
 
   async getPublicRecipes(): Promise<Recipe[]> {
