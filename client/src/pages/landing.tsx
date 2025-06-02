@@ -26,6 +26,34 @@ export default function Landing() {
         </div>
       </header>
 
+      {/* Hero Banner */}
+      <div className="relative overflow-hidden">
+        <div 
+          className="h-96 bg-cover bg-center bg-no-repeat relative"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=600&fit=crop&crop=center')`
+          }}
+        >
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center text-white max-w-4xl px-4">
+              <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-yellow-200 to-orange-200 bg-clip-text text-transparent">
+                Cook Together, Create Together
+              </h1>
+              <p className="text-xl md:text-2xl mb-8 text-gray-200">
+                The collaborative recipe platform where culinary creativity meets teamwork
+              </p>
+              <Button 
+                onClick={() => window.location.href = '/api/login'}
+                size="lg" 
+                className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 text-lg"
+              >
+                Start Cooking Together
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Background decorations */}
