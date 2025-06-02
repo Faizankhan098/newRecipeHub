@@ -9,6 +9,7 @@ import Home from "@/pages/home";
 import RecipeDetail from "@/pages/recipe-detail";
 import CreateRecipe from "@/pages/create-recipe";
 import Discover from "@/pages/discover";
+import TimerDemo from "@/pages/timer-demo";
 import NotFound from "@/pages/not-found";
 
 function Router() {
