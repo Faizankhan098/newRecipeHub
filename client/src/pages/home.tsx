@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Navigation } from "@/components/navigation";
-import { Plus, Clock, Users, Eye } from "lucide-react";
+import { Plus, Clock, Users, Eye, Star, TrendingUp, BookOpen, Heart } from "lucide-react";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import type { Recipe } from "@shared/schema";
 
@@ -34,19 +34,6 @@ export default function Home() {
   const { data: recipes, isLoading: recipesLoading, error } = useQuery<Recipe[]>({
     queryKey: ["/api/recipes"],
     retry: false,
-    onError: (error: Error) => {
-      if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
-        return;
-      }
-    },
   });
 
   const { data: publicRecipes } = useQuery<Recipe[]>({
@@ -75,18 +62,52 @@ export default function Home() {
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">My Recipes</h1>
-            <p className="text-muted-foreground">Create, collaborate, and cook amazing recipes</p>
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground mb-2">My Recipes</h1>
+              <p className="text-muted-foreground">Create, collaborate, and cook amazing recipes</p>
+            </div>
+            <Button 
+              onClick={() => setLocation("/recipes/new")}
+              className="recipe-button-primary shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              New Recipe
+            </Button>
           </div>
-          <Button 
-            onClick={() => setLocation("/recipes/new")}
-            className="recipe-button-primary"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            New Recipe
-          </Button>
+
+          {/* Quick Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <Card className="text-center">
+              <CardContent className="pt-4">
+                <BookOpen className="h-6 w-6 text-primary mx-auto mb-2" />
+                <div className="text-xl font-bold text-foreground">{(recipes as Recipe[])?.length || 0}</div>
+                <div className="text-xs text-muted-foreground">My Recipes</div>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="pt-4">
+                <Users className="h-6 w-6 text-primary mx-auto mb-2" />
+                <div className="text-xl font-bold text-foreground">12</div>
+                <div className="text-xs text-muted-foreground">Collaborators</div>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="pt-4">
+                <Heart className="h-6 w-6 text-primary mx-auto mb-2" />
+                <div className="text-xl font-bold text-foreground">45</div>
+                <div className="text-xs text-muted-foreground">Favorites</div>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="pt-4">
+                <TrendingUp className="h-6 w-6 text-primary mx-auto mb-2" />
+                <div className="text-xl font-bold text-foreground">8</div>
+                <div className="text-xs text-muted-foreground">This Week</div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* My Recipes */}
@@ -114,7 +135,7 @@ export default function Home() {
             <Card className="p-8 text-center">
               <p className="text-muted-foreground">Failed to load recipes. Please try again.</p>
             </Card>
-          ) : !recipes || recipes.length === 0 ? (
+          ) : !recipes || (recipes as Recipe[]).length === 0 ? (
             <Card className="p-8 text-center">
               <div className="max-w-md mx-auto">
                 <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
@@ -134,7 +155,7 @@ export default function Home() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {recipes.map((recipe) => (
+              {(recipes as Recipe[]).map((recipe) => (
                 <Card 
                   key={recipe.id} 
                   className="recipe-card cursor-pointer"
@@ -169,7 +190,7 @@ export default function Home() {
                     </div>
                     {recipe.tags && recipe.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-3">
-                        {recipe.tags.slice(0, 3).map((tag) => (
+                        {recipe.tags?.slice(0, 3).map((tag: string) => (
                           <Badge key={tag} variant="outline" className="text-xs">
                             {tag}
                           </Badge>

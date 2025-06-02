@@ -265,7 +265,7 @@ export default function Discover() {
             <Card className="p-8 text-center">
               <p className="text-muted-foreground">Failed to load community recipes. Please try again.</p>
             </Card>
-          ) : !publicRecipes || publicRecipes.length === 0 ? (
+          ) : !publicRecipes || (publicRecipes as Recipe[]).length === 0 ? (
             <Card className="p-8 text-center">
               <div className="max-w-md mx-auto">
                 <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
@@ -285,7 +285,7 @@ export default function Discover() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {publicRecipes.map((recipe) => (
+              {(publicRecipes as Recipe[]).map((recipe) => (
                 <Card 
                   key={recipe.id} 
                   className="recipe-card cursor-pointer"
